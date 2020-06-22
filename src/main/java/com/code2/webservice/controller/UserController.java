@@ -7,8 +7,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,20 +34,7 @@ public class UserController {
 	private UserService userService;
 	
 	@PostMapping
-	@CrossOrigin(origins = "http://localhost:8081")
 	public UserResponse createUser(@Valid @RequestBody UserRequest userRequest,BindingResult result) {
-		
-//		if(userRequest.getUsername().isEmpty()) {
-//			throw new MissingRequiredFieldException("Username is empty");
-//		}
-		
-//		if(result.hasErrors()) {
-//			String [] message = "";
-//			for(ObjectError error:result.getAllErrors()) {
-//			    message += error.getDefaultMessage()+"\n";
-//			}
-//			throw new MissingRequiredFieldException(message);
-//		}
 		
 		UserDto user = new UserDto();
 		BeanUtils.copyProperties(userRequest, user);
@@ -58,7 +45,6 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}")
-	@CrossOrigin(origins = "http://localhost:8081")
 	public UserResponse getUser(@PathVariable("id")Long id) throws NotFoundException {
 		UserDto userDto = userService.getUserById(id);
 		UserResponse userResponse = new UserResponse();
@@ -67,7 +53,6 @@ public class UserController {
 	}
 	
 	@GetMapping
-	@CrossOrigin(origins = "http://localhost:8081")
 	public List<UserResponse> getUsers() {
 		
 		List<UserDto> userDtoList = userService.getUsers();
@@ -95,7 +80,6 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@CrossOrigin(origins = "http://localhost:8081")
 	public ApiResponse deleteUser(@PathVariable("id")Long id) {
 		userService.deleteUser(id);
 		return new ApiResponse(true, "Successfully deleted.");

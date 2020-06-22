@@ -6,11 +6,14 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.code2.webservice.dto.UserDto;
 import com.code2.webservice.entity.User;
 import com.code2.webservice.repository.UserRepository;
+import com.code2.webservice.security.UserPrincipal;
 
 import javassist.NotFoundException;
 
@@ -75,6 +78,21 @@ public class UserServiceImpl implements UserService{
 		}
 		
 		throw new NotFoundException("User not found");
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
+		
+		if(username.equals("johndoe")) {
+			List<String> roles = new ArrayList<String>();
+			roles.add("ROLE_ADMIN");
+			roles.add("ROLE_USER");
+			UserPrincipal foundUser = new UserPrincipal(1L,"johndoe","$2a$04$Tblt4pXwIFZh9MZFTBfLNOOzDjJLwWUyt52S9q6HVhp1lGeQJSKTy",roles);
+			return foundUser;
+		}
+		
+		throw new UsernameNotFoundException("User ma shi par");
 	}
 
 }
